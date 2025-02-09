@@ -6,6 +6,20 @@ import aiTutor from "../assets/aiTutor.png";
 import LearningPath from "../assets/LearningPath.png";
 import courseCraftLogo from "../assets/CourseCraft.webp"; // Import the logo
 
+// When making API calls, use the environment variable like this:
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+// Example API call:
+const fetchData = async () => {
+  try {
+    const response = await fetch(`${backendUrl}/api/your-endpoint`);
+    const data = await response.json();
+    // Handle the data
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
 const Home = () => {
   const navigate = useNavigate();
   const [isClicked, setIsClicked] = useState(false);
