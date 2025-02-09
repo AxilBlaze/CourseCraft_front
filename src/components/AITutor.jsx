@@ -1,6 +1,7 @@
 // AiTutor.jsx
 import { useState } from "react";
 import { motion } from "framer-motion";
+import axios from 'axios';
 
 const AITutor = () => {
   const [activeTab, setActiveTab] = useState("Chat");
@@ -85,18 +86,27 @@ const AITutor = () => {
   );
 };
 
-// ... previous imports and code remain the same ...
-
 const ChatSection = () => {
   const [messages, setMessages] = useState([
     {
       type: 'system',
-      content: 'Hi! I\'m your AI learning assistant. Ask me any questions about programming concepts!'
+      content: 'Hi! I\'m your AI learning assistant. I can help with both programming concepts and teaching strategies!'
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSendMessage = () => {
+  // Quick suggestion topics combining both programming and teaching
+  const quickSuggestions = [
+    "Explain React Hooks",
+    "How to improve student engagement?",
+    "What is state management?",
+    "Tips for lesson planning",
+    "Explain REST APIs",
+    "Classroom management strategies"
+  ];
+
+  const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
     
     setMessages(prev => [...prev, {
@@ -104,15 +114,43 @@ const ChatSection = () => {
       content: inputMessage
     }]);
     
-    // Simulated AI response - in real implementation, this would be connected to your backend
-    setTimeout(() => {
-      setMessages(prev => [...prev, {
-        type: 'assistant',
-        content: "I'll help you understand that concept. Let me break it down..."
-      }]);
-    }, 1000);
+    setIsLoading(true);
     
-    setInputMessage('');
+    try {
+      console.log('Sending request to:', '/api/tutor/chat');
+      const response = await axios.post('/api/tutor/chat', {
+        message: inputMessage,
+        user_id: 'test-user'
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        timeout: 30000 // 30 seconds timeout
+      });
+      
+      console.log('Response:', response.data);
+      
+      if (response.data && response.data.response) {
+        setMessages(prev => [...prev, {
+          type: 'assistant',
+          content: response.data.response
+        }]);
+      } else {
+        throw new Error('Invalid response format');
+      }
+    } catch (error) {
+      console.error('Full error:', error);
+      console.error('Error response:', error.response);
+      setMessages(prev => [...prev, {
+        type: 'system',
+        content: error.response?.data?.error || 
+                error.response?.status === 503 ? "AI Tutor is warming up, please try again in a moment." :
+                "Could not connect to AI Tutor. Please try again."
+      }]);
+    } finally {
+      setIsLoading(false);
+      setInputMessage('');
+    }
   };
 
   return (
@@ -131,6 +169,8 @@ const ChatSection = () => {
                 p-4 rounded-xl max-w-[80%] 
                 ${message.type === 'user' 
                   ? 'bg-gradient-to-r from-purple-500 to-pink-500' 
+                  : message.type === 'system'
+                  ? 'bg-gray-600/50'
                   : 'bg-white/10'
                 }
               `}>
@@ -138,16 +178,22 @@ const ChatSection = () => {
               </div>
             </motion.div>
           ))}
+          {isLoading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex justify-start"
+            >
+              <div className="bg-white/10 p-4 rounded-xl">
+                <p className="text-white">Thinking...</p>
+              </div>
+            </motion.div>
+          )}
         </div>
 
         {/* Quick Questions Suggestions */}
         <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
-          {[
-            "Explain React Hooks",
-            "What is state management?",
-            "How does async/await work?",
-            "Explain REST APIs"
-          ].map((question) => (
+          {quickSuggestions.map((question) => (
             <motion.button
               key={question}
               whileHover={{ scale: 1.05 }}
@@ -168,13 +214,16 @@ const ChatSection = () => {
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
             className="flex-1 bg-white/10 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            placeholder="Ask any programming concept..."
+            placeholder="Ask about programming or teaching strategies..."
           />
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleSendMessage}
-            className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-medium"
+            disabled={isLoading}
+            className={`px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-medium ${
+              isLoading ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
           >
             Send
           </motion.button>
@@ -184,21 +233,21 @@ const ChatSection = () => {
       {/* Features Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
         <div className="bg-white/5 p-4 rounded-xl">
-          <h3 className="font-medium mb-2 text-purple-300">Concept Explanations</h3>
+          <h3 className="font-medium mb-2 text-purple-300">Programming Help</h3>
           <p className="text-sm text-gray-400">
             Get detailed explanations of programming concepts with examples
           </p>
         </div>
         <div className="bg-white/5 p-4 rounded-xl">
-          <h3 className="font-medium mb-2 text-purple-300">Code Reviews</h3>
+          <h3 className="font-medium mb-2 text-purple-300">Teaching Strategies</h3>
           <p className="text-sm text-gray-400">
-            Share your code to get instant feedback and suggestions
+            Learn effective teaching methods and classroom management
           </p>
         </div>
         <div className="bg-white/5 p-4 rounded-xl">
-          <h3 className="font-medium mb-2 text-purple-300">Practice Problems</h3>
+          <h3 className="font-medium mb-2 text-purple-300">Lesson Planning</h3>
           <p className="text-sm text-gray-400">
-            Get personalized coding challenges based on your level
+            Get help with creating engaging and effective lesson plans
           </p>
         </div>
       </div>
