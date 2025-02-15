@@ -12,6 +12,9 @@ export const makeApiCall = async (endpoint, options = {}) => {
     });
     
     if (!response.ok) {
+      if (response.status === 503 || response.status === 504) {
+        throw new Error('Server is warming up, please try again in a moment.');
+      }
       throw new Error(`API call failed: ${response.statusText}`);
     }
     
@@ -26,10 +29,18 @@ export const makeApiCall = async (endpoint, options = {}) => {
 export const api = {
   // Chat related endpoints
   chat: {
-    sendMessage: (message) => makeApiCall('/api/chat', {
-      method: 'POST',
-      body: JSON.stringify({ message })
-    }),
+    sendMessage: async (message) => {
+      try {
+        const response = await makeApiCall('/api/chat', {
+          method: 'POST',
+          body: JSON.stringify({ message }),
+          timeout: 30000 // 30 second timeout
+        });
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
     getHistory: () => makeApiCall('/api/chat/history', {
       method: 'GET'
     }),
