@@ -1,24 +1,36 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
+console.log('API_URL:', API_URL); // Debug log
+
 // Example API client configuration
 export const makeApiCall = async (endpoint, options = {}) => {
+  const fullUrl = `${API_URL}${endpoint}`;
+  console.log('Making API call to:', fullUrl); // Debug log
+  
   try {
-    const response = await fetch(`${API_URL}${endpoint}`, {
+    const response = await fetch(fullUrl, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
         ...options.headers,
       },
     });
+    
+    console.log('Response status:', response.status); // Debug log
     
     if (!response.ok) {
       if (response.status === 503 || response.status === 504) {
         throw new Error('Server is warming up, please try again in a moment.');
       }
-      throw new Error(`API call failed: ${response.statusText}`);
+      const errorText = await response.text();
+      console.log('Error response:', errorText); // Debug log
+      throw new Error(`API call failed: ${response.statusText} - ${errorText}`);
     }
     
-    return await response.json();
+    const data = await response.json();
+    console.log('Response data:', data); // Debug log
+    return data;
   } catch (error) {
     console.error('API call error:', error);
     throw error;
