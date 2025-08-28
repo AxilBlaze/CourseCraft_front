@@ -216,11 +216,11 @@ const Home = () => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="relative z-10 flex justify-between items-center p-6"
+        className="relative z-10 flex justify-between items-center px-4 py-0"
       >
-        <div className="flex items-center space-x-3">
-          <img src="/logo.png" alt="CourseCraft" className="w-10 h-10" />
-          <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <div className="flex items-center space-x-5">
+          <img src="/logo.png" alt="CourseCraft" className="w-20 h-20" />
+          <span className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
             CourseCraft
           </span>
         </div>
@@ -247,33 +247,144 @@ const Home = () => {
 
             {/* Main Content */}
       <div className="relative z-10 flex h-[calc(100vh-80px)] overflow-hidden">
-        {/* Left Side - Main Content */}
-        <div className="flex-1 flex flex-col items-center justify-center px-6 py-2 pr-20">
+        {/* Left Side - Testimonials */}
+        <motion.div 
+          initial={{ x: -100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="fixed left-0 top-[90px] bottom-0 w-72 bg-white/5 backdrop-blur-lg border-r border-white/10 p-4 overflow-hidden"
+        >
+          <div className="mb-4">
+            <h2 className="text-xl font-bold text-center mb-1 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Student Success
+            </h2>
+            <p className="text-xs text-gray-300 text-center">
+              What our learners are saying
+            </p>
+      </div>
+
+          <div className="space-y-3 h-[calc(100vh-200px)] overflow-hidden">
+            {[
+              {
+                name: "Sarah Johnson",
+                role: "Software Developer",
+                avatar: "👩‍💻",
+                rating: 5,
+                text: "CourseCraft's AI tutor helped me transition from marketing to tech in just 6 months!",
+                course: "Web Development"
+              },
+              {
+                name: "Michael Chen",
+                role: "Data Scientist",
+                avatar: "👨‍🔬",
+                rating: 5,
+                text: "The personalized learning paths are incredible. I mastered ML faster than I ever imagined.",
+                course: "Data Science"
+              },
+              {
+                name: "Emily Rodriguez",
+                role: "UX Designer",
+                avatar: "👩‍🎨",
+                rating: 5,
+                text: "Interactive sessions and real-time feedback made learning design principles so engaging.",
+                course: "UI/UX Design"
+              },
+              {
+                name: "David Kim",
+                role: "Mobile Developer",
+                avatar: "👨‍💼",
+                rating: 5,
+                text: "Built my first app in 3 weeks! The AI tutor explained complex concepts so clearly.",
+                course: "Mobile Development"
+              },
+              {
+                name: "Lisa Thompson",
+                role: "Cloud Engineer",
+                avatar: "👩‍🔧",
+                rating: 5,
+                text: "From zero to AWS certified in 2 months. The adaptive learning is game-changing.",
+                course: "Cloud Computing"
+              },
+              {
+                name: "Alex Rivera",
+                role: "Cybersecurity Analyst",
+                avatar: "👨‍🛡️",
+                rating: 5,
+                text: "Hands-on security labs and personalized guidance helped me land my dream job.",
+                course: "Cybersecurity"
+              }
+            ].map((testimonial, index) => (
+              <motion.div
+                key={testimonial.name}
+                initial={{ x: -50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
+                whileHover={{ scale: 1.02, x: 5 }}
+                className="group cursor-pointer"
+              >
+                <div className="p-3 bg-white/5 backdrop-blur-lg border border-white/10 rounded-lg hover:bg-white/10 transition-all duration-300 hover:border-white/20">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-lg shadow-lg flex-shrink-0">
+                      {testimonial.avatar}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <h3 className="text-sm font-semibold text-white group-hover:text-purple-300 transition-colors duration-300 truncate">
+                          {testimonial.name}
+                        </h3>
+                        <div className="flex text-yellow-400 text-xs">
+                          {[...Array(testimonial.rating)].map((_, i) => (
+                            <span key={i}>⭐</span>
+                          ))}
+                        </div>
+                      </div>
+                      <p className="text-xs text-purple-400 mb-1 truncate">
+                        {testimonial.role}
+                      </p>
+                      <p className="text-xs text-gray-300 group-hover:text-gray-200 transition-colors duration-300 line-clamp-2 leading-relaxed">
+                        "{testimonial.text}"
+                      </p>
+                      <p className="text-xs text-purple-400 mt-1 font-medium">
+                        {testimonial.course}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* View All Testimonials Button */}
+          <div className="absolute bottom-4 left-4 right-4">
+            <motion.button
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 1.4 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-semibold rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300"
+            >
+              View All Reviews
+            </motion.button>
+          </div>
+        </motion.div>
+
+        {/* Center - Main Content */}
+        <div className="flex-1 flex flex-col items-center justify-center px-8 py-6 mx-72 mt-8">
         {/* Hero Section */}
         <motion.div 
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
-          className="text-center mb-4"
+          className="text-center mb-8"
         >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.5, type: "spring", stiffness: 100 }}
-            className="mb-2"
-          >
-            <img 
-              src={courseCraftLogo} 
-              alt="CourseCraft" 
-              className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-2 drop-shadow-2xl" 
-            />
-          </motion.div>
+
 
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-2xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent"
+            className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent"
           >
             CourseCraft
           </motion.h1>
@@ -282,7 +393,7 @@ const Home = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1 }}
-            className="text-lg md:text-xl font-semibold mb-2 text-gray-200"
+            className="text-xl md:text-3xl font-semibold mb-4 text-gray-200"
           >
             Your Personalized AI Tutor
           </motion.h2>
@@ -291,7 +402,7 @@ const Home = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2 }}
-            className="text-sm text-gray-300 mb-4 max-w-lg mx-auto"
+            className="text-base md:text-lg text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed"
           >
             Master any subject with AI-powered personalized learning paths, 
             interactive tutoring, and adaptive content designed just for you.
@@ -304,7 +415,7 @@ const Home = () => {
             whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(139, 92, 246, 0.3)" }}
             whileTap={{ scale: 0.95 }}
             onClick={handleButtonClick}
-            className={`px-5 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-semibold rounded-full shadow-lg hover:shadow-purple-500/25 transition-all duration-500 transform ${
+            className={`px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-lg font-semibold rounded-full shadow-lg hover:shadow-purple-500/25 transition-all duration-500 transform ${
               isClicked ? "scale-90 opacity-0" : ""
             }`}
           >
@@ -312,33 +423,33 @@ const Home = () => {
           </motion.button>
         </motion.div>
 
-        {/* Feature Cards */}
+                {/* Feature Cards */}
         <motion.div 
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.6 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-3xl mx-auto mb-4"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8"
         >
           {[
             { 
               name: "Dashboard", 
               path: "/dashboard", 
               icon: dashboard,
-              description: "Track progress",
+              description: "Track your progress and achievements",
               gradient: "from-blue-500 to-purple-600"
             },
             { 
               name: "AI Tutor", 
               path: "/AITutor", 
               icon: aiTutor,
-              description: "Get instant help",
+              description: "Get instant help from your AI assistant",
               gradient: "from-purple-500 to-pink-600"
             },
             { 
               name: "Learning Path", 
               path: "/LearningPath", 
               icon: LearningPath,
-              description: "Personalized routes",
+              description: "Follow personalized learning routes",
               gradient: "from-pink-500 to-red-600"
             }
           ].map((item, index) => (
@@ -347,25 +458,25 @@ const Home = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.8 + index * 0.2 }}
-              whileHover={{ y: -5, scale: 1.02 }}
+              whileHover={{ y: -8, scale: 1.03 }}
               className="group"
             >
-                            <NavLink
+              <NavLink
                 to={item.path}
-                className="block p-3 bg-white/5 backdrop-blur-lg border border-white/10 rounded-lg hover:bg-white/10 transition-all duration-500"
+                className="block p-6 bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl hover:bg-white/10 transition-all duration-500"
               >
                 <div className="text-center">
-                  <div className={`w-10 h-10 mx-auto mb-2 p-2 bg-gradient-to-r ${item.gradient} rounded-lg shadow-lg group-hover:shadow-xl transition-all duration-300`}>
+                  <div className={`w-16 h-16 mx-auto mb-4 p-3 bg-gradient-to-r ${item.gradient} rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300`}>
             <img 
               src={item.icon} 
               alt={item.name} 
                       className="w-full h-full object-contain filter brightness-0 invert" 
             />
                   </div>
-                  <h3 className="text-base font-bold mb-1 text-white group-hover:text-purple-300 transition-colors duration-300">
+                  <h3 className="text-xl font-bold mb-2 text-white group-hover:text-purple-300 transition-colors duration-300">
               {item.name}
             </h3>
-                  <p className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+                  <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
                     {item.description}
                   </p>
                 </div>
@@ -379,7 +490,7 @@ const Home = () => {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 2.4 }}
-          className="grid grid-cols-3 gap-3 max-w-lg mx-auto"
+          className="grid grid-cols-3 gap-6 max-w-2xl mx-auto"
         >
           {[
             { number: "10K+", label: "Students" },
@@ -391,12 +502,12 @@ const Home = () => {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.6, delay: 2.6 + index * 0.2, type: "spring" }}
-              className="text-center p-2 bg-white/5 backdrop-blur-lg rounded-lg border border-white/10"
+              className="text-center p-4 bg-white/5 backdrop-blur-lg rounded-xl border border-white/10"
             >
-              <div className="text-lg font-bold text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text mb-1">
+              <div className="text-2xl md:text-3xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text mb-2">
                 {stat.number}
               </div>
-              <div className="text-xs text-gray-300">{stat.label}</div>
+              <div className="text-sm text-gray-300">{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -407,7 +518,7 @@ const Home = () => {
           initial={{ x: 100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="fixed right-0 top-[80px] bottom-0 w-72 bg-white/5 backdrop-blur-lg border-l border-white/10 p-4 overflow-hidden"
+          className="fixed right-0 top-[90px] bottom-0 w-72 bg-white/5 backdrop-blur-lg border-l border-white/10 p-4 overflow-hidden"
         >
           <div className="mb-4">
             <h2 className="text-xl font-bold text-center mb-1 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
